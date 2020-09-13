@@ -24,4 +24,10 @@ body {
   margin: 0;
   background: #f2f2f7;
 }
+.red {
+  color: red;
+}
+.green {
+  color: green;
+}
 </style>

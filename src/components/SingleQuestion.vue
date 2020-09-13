@@ -1,22 +1,29 @@
 <template>
-  <div id="questionBox" v-bind:class="{ isCorrect: isCorrect, isWrong: isWrong }">
+  <div id="questionBox" v-bind:class="{ isCorrect: isCorrect, isWrong: isWrong,noAnswer: noAnswer}">
     <h3>{{ questionNumber + 1 }}. {{ questionTitle }}</h3>
     <!-- loop the answers -->
     <div id="answers" v-for="(answer, key) in answerChoices" v-bind:key="key">
-      <div id="question-choice" v-bind:class="{ correctChoice:singleQuestion.isCorrect }">
+      <div
+        id="question-choice"
+        v-bind:class="{ correctChoice:singleQuestion.answerKey===key &&finalDisplayAnswer && isWrong }"
+      >
         <input type="radio" :value="key" v-model="userChoice" v-on:click="onChoose(answer, key)" />
         <label>{{ answer }}</label>
       </div>
     </div>
-    <h1>{{singleQuestion}}</h1>
     <!-- TODO change accroding the text -->
-    <span id="answerTag">correct</span>
+    <span id="answerTag" v-bind:class="{green: isCorrect, red:isWrong}">{{correctText}}</span>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["singleQuestion", "questionNumber", "isSubmited"],
+  props: [
+    "singleQuestion",
+    "questionNumber",
+    "submitNoAnswer",
+    "finalDisplayAnswer",
+  ],
   data() {
     return {
       answer: "",
@@ -25,8 +32,32 @@ export default {
       userChoice: "",
       isCorrect: false,
       isWrong: false,
+      noAnswer: false,
       correctText: "",
     };
+  },
+  watch: {
+    submitNoAnswer: function (currentVal, oldVal) {
+      if (currentVal) {
+        if (!this.singleQuestion.userAnswer) {
+          this.noAnswer = true;
+        }
+      }
+    },
+    finalDisplayAnswer: function (currentVal, oldVal) {
+      if (currentVal) {
+        if (this.singleQuestion.userAnswer) {
+          this.noAnswer = false;
+          this.showAnswerAndStyle();
+          // this.showWrongAnswer();
+          // this.isCorrect =
+          //   this.singleQuestion.userAnswer === this.singleQuestion.answerKey;
+          // this.isWrong =
+          //   this.singleQuestion.userAnswer !== this.singleQuestion.answerKey;
+          // this.noAnswer = false;
+        }
+      }
+    },
   },
   methods: {
     onChoose: function (answer, key) {
@@ -38,10 +69,29 @@ export default {
       });
     },
   },
+  computed: {
+    showAnswerAndStyle: function () {
+      if (this.singleQuestion.userAnswer === this.singleQuestion.answerKey) {
+        this.isCorrect = true;
+        this.correctText = "Correct";
+      } else if (
+        this.singleQuestion.userAnswer !== this.singleQuestion.answerKey
+      ) {
+        this.isWrong = true;
+        this.correctText = "Wrong";
+      } else {
+        this.isCorrect = false;
+        this.isWrong = false;
+        this.correctText = "";
+      }
+    },
+  },
+
   created() {
     this.answerChoices = this.singleQuestion.answerChoices;
     this.questionTitle = this.singleQuestion.questionTitle;
   },
+  updated() {},
 };
 </script>
 
@@ -50,10 +100,13 @@ export default {
   margin: 5px;
 }
 #answerTag {
-  color: red;
   text-align: left;
   align-self: flex-end;
   margin: 10px;
+  margin-right: 45px;
+  margin-bottom: 15px;
+  height: 10px;
+  width: 10px;
 }
 #questionBox {
   display: flex;
@@ -77,6 +130,11 @@ export default {
 }
 .isWrong {
   border-color: red;
+  border-width: 3px;
+  border-style: solid;
+}
+.noAnswer {
+  border-color: yellow;
   border-width: 3px;
   border-style: solid;
 }

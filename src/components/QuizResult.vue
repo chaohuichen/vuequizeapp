@@ -1,17 +1,16 @@
 <template>
-  <div id="quiz-result">
+  <div id="quiz-result" v-show="showResult">
     <h2 id="result-title">Result</h2>
-    <h2>You got 5 / 10 questions correct</h2>
-    <h2 v-bind:class="{red:true}">0%</h2>
+    <h2>You got {{resultFraction}} questions correct</h2>
+    <h2 v-bind:class="{red:true}">{{resultPrecentage}}%</h2>
   </div>
 </template>
 
 <script>
 export default {
+  props: ["showResult", "resultPrecentage", "resultFraction"],
   data() {
-    return {
-      title: "Quiz Application",
-    };
+    return {};
   },
 };
 </script>

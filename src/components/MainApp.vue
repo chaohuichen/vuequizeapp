@@ -2,8 +2,12 @@
   <app-layout>
     <div id="main-div">
       <!-- title -->
-      <h1>Quiz 1 - HTML / CSS / JS Practice</h1>
-      <app-quizResult></app-quizResult>
+      <h1>{{title}}</h1>
+      <app-quizResult
+        :showResult="showResult"
+        :resultPrecentage="resultPrecentage"
+        :resultFraction="resultFraction"
+      ></app-quizResult>
       <form id="main-form">
         <!-- loop the questions in json -->
         <div v-for="(question,index) in quizQuestions" v-bind:key="index">
@@ -11,18 +15,18 @@
             :singleQuestion="question"
             :key="index"
             :questionNumber="index"
-            :isSubmited="isSubmited"
+            :submitNoAnswer="submitNoAnswer"
+            :finalDisplayAnswer="finalDisplayAnswer"
             v-on:onChoose="updateUserAnswer($event)"
           ></app-singleQuestion>
         </div>
       </form>
-
-      <button id="submitButton" type="submit" v-on:click="onSubmit">Submit</button>
+      <button type="submit" v-on:click="onSubmit">Submit</button>
       <span
         v-show="!AnswerdAllQuestion"
       >Answer all questions before submitting. Unanswered questions are displayed in yellow</span>
     </div>
-    <p>{{result}}</p>
+    <p>{{resultPrecentage}}</p>
     <p>{{quizQuestions}}</p>
     <p>{{answerkeys}}</p>
   </app-layout>
@@ -43,40 +47,27 @@ export default {
     return {
       title: "Quiz App",
       quizQuestions: [],
-      userAnswers: {},
-      answerkeys: [],
       AnswerdAllQuestion: true,
       isSubmited: false,
-      result: 0,
+      resultPrecentage: 0,
+      resultFraction: "0 / 0",
+      showResult: false,
+      finalDisplayAnswer: false,
+      submitNoAnswer: false,
     };
   },
   methods: {
-    updateUserAnswer: function (data) {
-      // const { questionNumber } = data;
-      // if (questionNumber in this.userAnswers) {
-      //   this.userAnswers[`${questionNumber}`] = data;
-      // }
-      // console.log(this.quizQuestions);
-    },
+    updateUserAnswer: function (data) {},
     validateAnswers: function () {
-      // for (const key in this.quizQuestions) {
-      //   if (key in this.quizQuestions) {
-      //     if (this.quizQuestions[answer].userAnswers === null) {
-      //       this.AnswerdAllQuestion = false;
-      //     }
-      //   }
-      // }
+      this.AnswerdAllQuestion = true;
       this.quizQuestions.forEach((question) => {
         if (!question.hasOwnProperty("userAnswer")) {
           this.AnswerdAllQuestion = false;
         }
       });
-      console.log(this.AnswerdAllQuestion);
-      if (this.AnswerdAllQuestion) {
-        this.calualteResult();
-      }
+      this.submitNoAnswer = !this.AnswerdAllQuestion && this.isSubmited;
     },
-    // TODO update the result and update the css box
+
     calualteResult: function () {
       const length = this.quizQuestions.length;
       let correctCount = 0;
@@ -91,27 +82,30 @@ export default {
           this.AnswerdAllQuestion = false;
         }
       });
-
-      this.result = (correctCount / length) * 100;
+      this.resultFraction = `${correctCount} / ${length}`;
+      this.resultPrecentage = (correctCount / length) * 100;
     },
     onSubmit: function () {
-      this.validateAnswers();
+      if (!this.showResult) {
+        this.isSubmited = true;
+        this.validateAnswers();
+
+        if (this.AnswerdAllQuestion) {
+          this.calualteResult();
+          this.finalDisplayAnswer = true;
+          this.showResult = true;
+        } else {
+          this.isSubmited = false;
+        }
+      }
     },
   },
 
-  //   computed: {
-  //     onChoose: function () {},
-  //   },
   created() {
     //reading the data from json
     const { myQuestions } = questions;
-    this.quizQuestions = [...myQuestions];
-
-    //getting the answerKeys and setup user answers
-    this.quizQuestions.forEach((question) => {
-      this.answerkeys.push(parseInt(question.answerKey));
-      this.userAnswers[question.id] = null;
-    });
+    this.quizQuestions = [...myQuestions.data];
+    this.title = myQuestions.quizTitle;
   },
 };
 </script>
@@ -139,9 +133,4 @@ button {
   color: red;
   margin: 10px;
 }
-/* .isCorrect {
-  border-color: coral;
-  border-width: thin medium thick 10px;
-  background: red;
-} */
 </style>

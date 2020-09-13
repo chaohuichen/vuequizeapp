@@ -1,26 +1,29 @@
 {
-  "myQuestions": [
-    {
-      "id": 0,
-      "questionTitle": "what is the purpose of HTML and CSS",
-      "answerChoices": {
-        "1": "HTML handles data, CSS handles routing",
-        "3": "HTML tells the browser what to display, CSS tell it what Style to display it in",
-        "2": "HTML handles data, CSS handles routing",
-        "4": "HTML tells the browser what to display, CSS tell it what Style to display it in"
+  "myQuestions": {
+    "quizTitle": "Quiz 1 - HTML / CSS / JS Practice",
+    "data": [
+      {
+        "id": 0,
+        "questionTitle": "what is the purpose of HTML and CSS",
+        "answerChoices": {
+          "1": "HTML handles data, CSS handles routing",
+          "3": "HTML tells the browser what to display, CSS tell it what Style to display it in",
+          "2": "HTML handles data, CSS handles routing",
+          "4": "HTML tells the browser what to display, CSS tell it what Style to display it in"
+        },
+        "answerKey": "1"
       },
-      "answerKey": "1"
-    },
-    {
-      "id": 1,
-      "questionTitle": "what is the purpose of HTML and CSSsdsdsdsdsdsds",
-      "answerChoices": {
-        "1": "HTML handles data, CSS handles routing",
-        "3": "HTML tells the browser what to display, CSS tell it what Style to display it in",
-        "2": "HTML handles data, CSS handles routing",
-        "4": "HTML tells the browser what to display, CSS tell it what Style to display it in"
-      },
-      "answerKey": "1"
-    }
-  ]
+      {
+        "id": 1,
+        "questionTitle": "what is the purpose of HTML and CSSsdsdsdsdsdsds",
+        "answerChoices": {
+          "1": "HTML handles data, CSS handles routing",
+          "3": "HTML tells the browser what to display, CSS tell it what Style to display it in",
+          "2": "HTML handles data, CSS handles routing",
+          "4": "HTML tells the browser what to display, CSS tell it what Style to display it in"
+        },
+        "answerKey": "1"
+      }
+    ]
+  }
 }
