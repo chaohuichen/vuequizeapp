@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <main-app></main-app>
-  </div>
+  <main-app></main-app>
 </template>
 
 <script>
@@ -12,9 +10,7 @@ export default {
     "main-app": MainApp,
   },
   data() {
-    return {
-      msg: "Vue Quiz App",
-    };
+    return {};
   },
 };
 </script>

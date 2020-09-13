@@ -1,6 +1,10 @@
 <template>
   <footer>
-    <h4>Developed by Vue and Created by Peter</h4>
+    <h4>
+      Created with
+      <a href="https://vuejs.org/">Vue.js</a> & hosted on Netilify. Developed by
+      <a href="https://www.chaohuichen.com/">Peter Chen</a>
+    </h4>
   </footer>
 </template>
 

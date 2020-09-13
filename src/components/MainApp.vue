@@ -18,11 +18,21 @@
             :questionNumber="index"
             :submitNoAnswer="submitNoAnswer"
             :finalDisplayAnswer="finalDisplayAnswer"
-            v-on:onChoose="updateUserAnswer($event)"
-          ></app-singleQuestion>
+            :reset="reset"
+            v-on:onChoose="resetValue($event)"
+          >></app-singleQuestion>
         </div>
       </form>
-      <button type="submit" v-on:click="onSubmit">Submit</button>
+      <div>
+        <button type="submit" v-on:click="onSubmit">Submit</button>
+        <button
+          :disabled="!showResult"
+          type="button"
+          :class="{resetButton:showResult,disabledButton:!showResult}"
+          v-on:click="onReset"
+        >Retake</button>
+      </div>
+
       <!-- error span -->
       <span
         v-show="!AnswerdAllQuestion"
@@ -36,6 +46,20 @@ import Layout from "./Layout";
 import questions from "../questions.json";
 import Singlequestion from "./SingleQuestion";
 import QuizResult from "./QuizResult";
+
+//https://medium.com/@sammynigwe/resetting-vue-instance-data-24d6e9bff0b7#:~:text=To%20reset%20to%20default%20values,in%20the%20vue%20instance%20data.
+const dataDefault = {
+  title: "Quiz Application",
+  quizQuestions: [],
+  AnswerdAllQuestion: true,
+  isSubmited: false,
+  resultPrecentage: 0,
+  resultFraction: "0 / 0",
+  showResult: false,
+  finalDisplayAnswer: false,
+  submitNoAnswer: false,
+  reset: false,
+};
 export default {
   components: {
     "app-layout": Layout,
@@ -44,15 +68,7 @@ export default {
   },
   data() {
     return {
-      title: "Quiz Application",
-      quizQuestions: [],
-      AnswerdAllQuestion: true,
-      isSubmited: false,
-      resultPrecentage: 0,
-      resultFraction: "0 / 0",
-      showResult: false,
-      finalDisplayAnswer: false,
-      submitNoAnswer: false,
+      ...dataDefault,
     };
   },
   methods: {
@@ -82,7 +98,7 @@ export default {
         }
       });
       this.resultFraction = `${correctCount} / ${length}`;
-      this.resultPrecentage = (correctCount / length) * 100;
+      this.resultPrecentage = Math.floor(correctCount / length) * 100;
     },
     onSubmit: function () {
       if (!this.showResult) {
@@ -98,13 +114,31 @@ export default {
         }
       }
     },
+    onReset: function () {
+      Object.keys(dataDefault).forEach((k) => {
+        if (Object.prototype.hasOwnProperty.call(this.$data, k)) {
+          this.$data[k] = dataDefault[k];
+        }
+      });
+      this.reset = true;
+      this.gettingData();
+    },
+
+    gettingData: function () {
+      //reading the data from json
+      const { myQuestions } = questions;
+      this.quizQuestions = [...myQuestions.data];
+      this.title = myQuestions.quizTitle;
+    },
+    resetValue: function (resetValue) {
+      if (this.reset) {
+        this.reset = resetValue;
+      }
+    },
   },
 
   created() {
-    //reading the data from json
-    const { myQuestions } = questions;
-    this.quizQuestions = [...myQuestions.data];
-    this.title = myQuestions.quizTitle;
+    this.gettingData();
   },
 };
 </script>
@@ -122,6 +156,12 @@ button {
   background-color: #4caf50;
   color: white;
   border-radius: 5px;
+}
+.resetButton {
+  background-color: blue;
+}
+.disabledButton {
+  background-color: gray;
 }
 #main-div {
   display: flex;

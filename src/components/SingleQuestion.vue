@@ -3,13 +3,19 @@
     <h3>{{ questionNumber + 1 }}. {{ questionTitle }}</h3>
     <!-- loop the answers -->
     <img :src="getImage(singleQuestion.questionImage)" v-show="singleQuestion.questionImage" />
-    <div id="answers" v-for="(answer, key) in answerChoices" v-bind:key="key">
+    <div id="answers" v-for="(answerChoice, key) in answerChoices" v-bind:key="key">
       <div
         id="question-choice"
         v-bind:class="{ correctChoice:singleQuestion.answerKey===key &&finalDisplayAnswer && isWrong }"
       >
-        <input type="radio" :value="key" v-model="userChoice" v-on:click="onChoose(answer, key)" />
-        <label>{{ answer }}</label>
+        <input
+          type="radio"
+          :disabled="disableInput"
+          :value="key"
+          v-model="userChoice"
+          v-on:click="onChoose(key)"
+        />
+        <label>{{ answerChoice }}</label>
       </div>
     </div>
     <span id="answerTag" v-bind:class="{green: isCorrect, red:isWrong}">{{correctText}}</span>
@@ -17,23 +23,43 @@
 </template>
 
 <script>
+const dataDefault = {
+  answer: "",
+  answerChoices: [],
+  questionTitle: "",
+  userChoice: "",
+  isCorrect: false,
+  isWrong: false,
+  noAnswer: false,
+  correctText: "",
+  disableInput: false,
+  resetSingleQuestion: false,
+};
 export default {
-  props: [
-    "singleQuestion",
-    "questionNumber",
-    "submitNoAnswer",
-    "finalDisplayAnswer",
-  ],
+  props: {
+    singleQuestion: {
+      type: Object,
+      required: true,
+    },
+    questionNumber: {
+      type: Number,
+      required: true,
+    },
+    submitNoAnswer: {
+      type: Boolean,
+      required: true,
+    },
+    finalDisplayAnswer: {
+      type: Boolean,
+      required: true,
+    },
+    reset: {
+      type: Boolean,
+    },
+  },
   data() {
     return {
-      answer: "",
-      answerChoices: [],
-      questionTitle: "",
-      userChoice: "",
-      isCorrect: false,
-      isWrong: false,
-      noAnswer: false,
-      correctText: "",
+      ...dataDefault,
     };
   },
   watch: {
@@ -48,19 +74,22 @@ export default {
       if (currentVal) {
         if (this.singleQuestion.userAnswer) {
           this.noAnswer = false;
+          this.disableInput = true;
           this.showAnswerAndStyle();
         }
       }
     },
+    reset: function (currentVal, oldVal) {
+      this.resetSingleQuestion = currentVal;
+      if (this.resetSingleQuestion) {
+        this.singleQuestionRest();
+      }
+    },
   },
   methods: {
-    onChoose: function (answer, key) {
-      this.singleQuestion.userAnswer = key;
-      this.$emit("onChoose", {
-        answer,
-        key,
-        questionNumber: this.questionNumber,
-      });
+    onChoose: function (userAnswerkey) {
+      this.singleQuestion.userAnswer = userAnswerkey;
+      this.$emit("onChoose", false);
     },
     getImage: function (imagePath) {
       // the current image path is locally and need one more file level to access assets
@@ -85,18 +114,28 @@ export default {
         this.correctText = "";
       }
     },
+    singleQuestionRest: function () {
+      Object.keys(dataDefault).forEach((k) => {
+        if (Object.prototype.hasOwnProperty.call(this.$data, k)) {
+          this.$data[k] = dataDefault[k];
+        }
+      });
+      this.answerChoices = this.singleQuestion.answerChoices;
+      this.questionTitle = this.singleQuestion.questionTitle;
+    },
   },
   created() {
     this.answerChoices = this.singleQuestion.answerChoices;
     this.questionTitle = this.singleQuestion.questionTitle;
   },
-  updated() {},
 };
 </script>
 
 <style scoped>
 #answers {
   margin: 5px;
+  align-self: start;
+  width: 90%;
 }
 img {
   height: 20vh;
@@ -115,7 +154,6 @@ img {
   display: flex;
   flex-direction: column;
   background: white;
-  /* padding: 2rem 2rem; */
   padding-top: 1rem;
   padding-left: 1rem;
   padding-right: 1rem;
@@ -127,6 +165,7 @@ img {
 #questionBox h3 {
   margin-left: 10px;
 }
+
 .isCorrect {
   border-color: green;
   border-width: 3px;
@@ -143,10 +182,10 @@ img {
   border-style: solid;
 }
 #question-choice {
-  /* padding: 0rem 5rem 0rem 5rem; */
+  display: flex;
+  flex-direction: row;
   padding-top: 5px;
   padding-bottom: 5px;
-  width: 80%;
 }
 .correctChoice {
   color: white;

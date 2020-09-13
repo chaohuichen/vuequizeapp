@@ -8,21 +8,57 @@
         "questionImage": null,
         "answerChoices": {
           "1": "HTML handles data, CSS handles routing",
-          "3": "HTML tells the browser what to display, CSS tell it what Style to display it in",
-          "2": "HTML handles data, CSS handles routing",
+          "2": "HTML tells the browser what to display, CSS tell it what Style to display it in",
+          "3": "HTML handles data, CSS handles routing",
           "4": "HTML tells the browser what to display, CSS tell it what Style to display it in"
+        },
+        "answerKey": "2"
+      },
+      {
+        "id": 1,
+        "questionTitle": "Which one of these html tags contains correct syntax",
+        "questionImage": null,
+        "answerChoices": {
+          "1": "<div class=row></div>",
+          "2": "<div style='position:absolute;'></div>",
+          "3": "<div class=row style='position:absolute;'></div>",
+          "4": "<div class=row id='my-div'></div>"
+        },
+        "answerKey": "2"
+      },
+      {
+        "id": 2,
+        "questionTitle": "HTML stands for?",
+        "questionImage": null,
+        "answerChoices": {
+          "1": "Hyper Text Markup Language",
+          "2": "High Text Markup Language",
+          "3": "Hyper Tabular Markup Language",
+          "4": "None of these"
         },
         "answerKey": "1"
       },
       {
-        "id": 1,
-        "questionTitle": "what is the purpose of HTML and CSSsdsdsdsdsdsds",
+        "id": 3,
+        "questionTitle": "Which one of these html tags contains correct syntax",
         "questionImage": "assets/question2.png",
         "answerChoices": {
-          "1": "HTML handles data, CSS handles routing",
-          "3": "HTML tells the browser what to display, CSS tell it what Style to display it in",
-          "2": "HTML handles data, CSS handles routing",
-          "4": "HTML tells the browser what to display, CSS tell it what Style to display it in"
+          "1": "1",
+          "2": "50",
+          "3": "17",
+          "4": "25"
+        },
+        "answerKey": "4"
+      },
+      {
+        "id": 4,
+        "questionTitle": "is this application awsome??",
+        "questionImage": null,
+        "answerChoices": {
+          "1": "Yes, Super awsome",
+          "2": "Yes, kind of awsome",
+          "3": "No, need more imporvement",
+          "4": "None the above"
         },
         "answerKey": "1"
       }
