@@ -3,6 +3,7 @@
     <div id="main-div">
       <!-- title -->
       <h1>{{title}}</h1>
+      <!-- quiz result -->
       <app-quizResult
         :showResult="showResult"
         :resultPrecentage="resultPrecentage"
@@ -22,13 +23,11 @@
         </div>
       </form>
       <button type="submit" v-on:click="onSubmit">Submit</button>
+      <!-- error span -->
       <span
         v-show="!AnswerdAllQuestion"
       >Answer all questions before submitting. Unanswered questions are displayed in yellow</span>
     </div>
-    <p>{{resultPrecentage}}</p>
-    <p>{{quizQuestions}}</p>
-    <p>{{answerkeys}}</p>
   </app-layout>
 </template>
 
@@ -45,7 +44,7 @@ export default {
   },
   data() {
     return {
-      title: "Quiz App",
+      title: "Quiz Application",
       quizQuestions: [],
       AnswerdAllQuestion: true,
       isSubmited: false,
@@ -128,6 +127,10 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+#main-div h1 {
+  margin-top: 5rem;
+  margin-bottom: -2px;
 }
 #main-div span {
   color: red;

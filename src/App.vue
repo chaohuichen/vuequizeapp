@@ -23,6 +23,7 @@ export default {
 body {
   margin: 0;
   background: #f2f2f7;
+  font-family: "Lato", sans-serif;
 }
 .red {
   color: red;

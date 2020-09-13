@@ -2,6 +2,7 @@
   <div id="questionBox" v-bind:class="{ isCorrect: isCorrect, isWrong: isWrong,noAnswer: noAnswer}">
     <h3>{{ questionNumber + 1 }}. {{ questionTitle }}</h3>
     <!-- loop the answers -->
+    <img :src="getImage(singleQuestion.questionImage)" v-show="singleQuestion.questionImage" />
     <div id="answers" v-for="(answer, key) in answerChoices" v-bind:key="key">
       <div
         id="question-choice"
@@ -11,7 +12,6 @@
         <label>{{ answer }}</label>
       </div>
     </div>
-    <!-- TODO change accroding the text -->
     <span id="answerTag" v-bind:class="{green: isCorrect, red:isWrong}">{{correctText}}</span>
   </div>
 </template>
@@ -49,12 +49,6 @@ export default {
         if (this.singleQuestion.userAnswer) {
           this.noAnswer = false;
           this.showAnswerAndStyle();
-          // this.showWrongAnswer();
-          // this.isCorrect =
-          //   this.singleQuestion.userAnswer === this.singleQuestion.answerKey;
-          // this.isWrong =
-          //   this.singleQuestion.userAnswer !== this.singleQuestion.answerKey;
-          // this.noAnswer = false;
         }
       }
     },
@@ -68,8 +62,14 @@ export default {
         questionNumber: this.questionNumber,
       });
     },
-  },
-  computed: {
+    getImage: function (imagePath) {
+      // the current image path is locally and need one more file level to access assets
+      if (imagePath !== null) {
+        return require("../" + imagePath);
+      } else {
+        return null;
+      }
+    },
     showAnswerAndStyle: function () {
       if (this.singleQuestion.userAnswer === this.singleQuestion.answerKey) {
         this.isCorrect = true;
@@ -86,7 +86,6 @@ export default {
       }
     },
   },
-
   created() {
     this.answerChoices = this.singleQuestion.answerChoices;
     this.questionTitle = this.singleQuestion.questionTitle;
@@ -98,6 +97,10 @@ export default {
 <style scoped>
 #answers {
   margin: 5px;
+}
+img {
+  height: 20vh;
+  width: 20vw;
 }
 #answerTag {
   text-align: left;
@@ -115,8 +118,9 @@ export default {
   /* padding: 2rem 2rem; */
   padding-top: 1rem;
   padding-left: 1rem;
+  padding-right: 1rem;
   margin: 20px;
-  width: 150vh;
+  width: 50vw;
   border-radius: 8px;
   box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.15);
 }
@@ -148,5 +152,23 @@ export default {
   color: white;
   background: #008000;
   border-radius: 10px;
+}
+@media screen and (min-width: 768px) {
+  #questionBox {
+    width: 60vw;
+    min-width: 450px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  #questionBox {
+    align-items: center;
+    width: 10vw;
+    min-width: 300px;
+  }
+  img {
+    height: 20vh;
+    width: 40vw;
+  }
 }
 </style>

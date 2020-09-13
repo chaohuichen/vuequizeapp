@@ -5,6 +5,7 @@
       {
         "id": 0,
         "questionTitle": "what is the purpose of HTML and CSS",
+        "questionImage": null,
         "answerChoices": {
           "1": "HTML handles data, CSS handles routing",
           "3": "HTML tells the browser what to display, CSS tell it what Style to display it in",
@@ -16,6 +17,7 @@
       {
         "id": 1,
         "questionTitle": "what is the purpose of HTML and CSSsdsdsdsdsdsds",
+        "questionImage": "assets/question2.png",
         "answerChoices": {
           "1": "HTML handles data, CSS handles routing",
           "3": "HTML tells the browser what to display, CSS tell it what Style to display it in",
