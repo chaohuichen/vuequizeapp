@@ -184,6 +184,7 @@ img {
 #question-choice {
   display: flex;
   flex-direction: row;
+  margin-left: 20px;
   padding-top: 5px;
   padding-bottom: 5px;
 }
